@@ -3,7 +3,7 @@ name: Запрос функциональности (Feature Request)
 about: Разновидность требований к продукту, представляет собой предложения от будущих
   пользователей или членов проектной команды о том, как улучшить продукт.
 title: "[FeatureRequest]"
-labels: enhancement
+labels: feature-request
 assignees: andreykarinskiy
 type: Feature
 
