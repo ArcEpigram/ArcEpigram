@@ -12,6 +12,9 @@ TODO
 - [Правила работы с репозиторием](./docs/instructions/repository_management.md)
 - [Правила оформления коммитов](./docs/instructions/conventional_commits.md)
 
+## Основные разделы
+- [Запросы заинтересованных лиц](./docs/requirements/requests/)
+
 ## Как устроен проект
 TODO
 
