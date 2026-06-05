@@ -3,7 +3,7 @@ name: Запросы заинтересованных сторон (Stakeholder 
 about: Обобщенное и формализованное представление запросов и потребностей заинтересованных
   сторон.
 title: "[StakeholderRequests]"
-labels: enhancement
+labels: stakeholder-requests
 assignees: andreykarinskiy
 type: Feature
 
