@@ -6,6 +6,7 @@ title: "[StakeholderRequests]"
 labels: stakeholder-requests
 assignees: andreykarinskiy
 type: Feature
+issue_number: 0
 
 ---
 
