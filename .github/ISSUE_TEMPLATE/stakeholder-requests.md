@@ -2,11 +2,10 @@
 name: Запросы заинтересованных сторон (Stakeholder Requests)
 about: Обобщенное и формализованное представление запросов и потребностей заинтересованных
   сторон.
-title: "[StakeholderRequests]"
+title: ''
 labels: stakeholder-requests
 assignees: andreykarinskiy
 type: Feature
-issue_number: 0
 
 ---
 
