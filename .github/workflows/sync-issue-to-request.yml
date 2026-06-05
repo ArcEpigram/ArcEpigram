@@ -1,0 +1,76 @@
+name: Sync Issue to Requirement Request
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  sync:
+    if: contains(github.event.issue.labels.*.name, 'stakeholder-requests')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Prepare file content
+        id: prepare
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const number = issue.number;
+            const title = issue.title;
+
+            const safeTitle = title
+              .replace(/[^a-zа-яё0-9\s-]/gi, '')
+              .replace(/\s+/g, '-')
+              .toLowerCase()
+              .slice(0, 60);
+            const filename = `${number}-${safeTitle}.md`;
+
+            const frontMatter = [
+              '---',
+              `issue_number: ${number}`,
+              `author: ${issue.user.login}`,
+              `created: ${issue.created_at}`,
+              `updated: ${issue.updated_at}`,
+              `state: ${issue.state}`,
+              `labels: ${issue.labels.map(l => l.name).join(', ')}`,
+              '---',
+              ''
+            ].join('\n');
+
+            const body = issue.body || '';
+            const content = frontMatter + body + '\n';
+
+            const fs = require('fs');
+            const dir = 'docs/requirements/requests';
+            if (!fs.existsSync(dir)) {
+              fs.mkdirSync(dir, { recursive: true });
+            }
+            const filePath = `${dir}/${filename}`;
+            fs.writeFileSync(filePath, content);
+
+            // Сохраняем путь для следующего шага
+            core.setOutput('filepath', filePath);
+            core.setOutput('filename', filename);
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add "${{ steps.prepare.outputs.filepath }}"
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "docs: Add ${{ steps.prepare.outputs.filename }} created by issue #${{ github.event.issue.number }}"
+            git push
+          fi
